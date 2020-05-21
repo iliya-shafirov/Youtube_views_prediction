@@ -1,0 +1,12 @@
+asyncio
+aiohttp
+openpyxl
+pandas
+lxml
+numpy
+aiofiles
+requests
+xlrd
+selenium
+iso8601
+pytube3
