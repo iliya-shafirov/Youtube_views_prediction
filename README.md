@@ -1,50 +1,48 @@
-#  Разработка и исследование методов прогнозирования популярности видеоконтента.
-Данный репозиторий содержит реализации ряда моделей, которые предназначены для решения задачи прогнозирования популярности видео.
-# Набор данных.
-Для запуска метода возможно скачивание данных утилитой wget с google drive или создание нового набора данных. Для сбора новых данных создан парсер(папка parser) на языке Python 3.
-## Использование пасера для сбора данных о видео по списку каналов:
-- Скачивание Python версии 3.6.8.
-- Запуск файла install.bat для установки всех необходимых бибилотек.
-- Создание API ключей Youtube Data API и сохранение их в файле api.txt(каждый ключ с новой строки).
-- Добавление ссылок на каналы в файл Urls.txt(cсылка на канал с новой строки).
-- Запуск файла start.bat.
-- Запуск start_new_view_count.bat для сбора просмотров каждого видео.
-## Использование пасера для сбора данных о видео по региону:
-- Скачивание Python версии 3.6.8.
-- Запуск файла install.bat для установки всех необходимых бибилотек.
-- Создание API ключей Youtube Data API и сохранение их в файле api.txt(каждый ключ с новой строки).
-- В файле config можно задать ограничение по количеству видео и выбрать регион.
-- Запуск файла start_new.bat.
-- Запуск start_new_view_count.bat для сбора просмотров каждого видео.
-# Реализованные методы.
-### 1. Метод прогнозирования популярности на основе визуальных данных с помощью сети с долгосрочной памятью(LRCN) 
-При помощи предобученной сверточной сети Resnet-152 извлекаются визуальные признаки из кадров видео. Признаки кажого кадра последовательно передаются в LSTM. Далее, применяется двухслойная полносвязная сеть для классификации.
+#  Development and research of methods for predicting the popularity of video content.
+This repository contains implementations of a number of models that are designed to solve the problem of predicting video popularity.
+# Data set.
+To run the method, it is both possible to download existing data with the wget utility from the google drive and to create a new dataset. To collect new data, a parser ('parser' folder) in Python 3 has been created.
+## Using parser to collect videos from YouTube channels:
+- Download Python 3.6.8.
+- Run the install.bat file to install all the required libraries.
+- Create Youtube Data API keys  and save them in the api.txt file (each key on a new line).
+- Add YouTube channel links to the Urls.txt file (one link per line).
+- Launch start.bat.
+- Start start_new_view_count.bat to collect the views of every video.
+## Using a parser to collect data about popular videos in a certain region:
+- Download Python 3.6.8.
+- Run the install.bat file to install all of the required libraries.
+- Create Youtube Data API keys  and save them in api.txt file (one key per line).
+- Set the limit on the number of videos downloaded and select the region in the config file.
+- Start the start_new.bat file.
+- Launch the start_new_view_count.bat file to collect views for each video.
+# Implemented methods.
+### 1. Prediction Method using visual characterisitics of a video using LRCN architecture.
+Using a pretrained Convolutional Network Resnet-152, visual cues are extracted from video frames. The attributes of each frame are sequentially fed into an LSTM cell. Next, a two-layer MLP network is applied for classification.
 
-### 2. Метод прогнозирования популярности на основе данных заголовка с помощью двунаправленной сети с долгосрочной памятью.(BILSTM)
-Заголовки видео представляются при помомщи предобученных эмбеддингов GLOVE. Для анализа предложения полученные представления подаются на вход BiLSTM, а затем в полносвязную сеть для классификацию.
+### 2. Prediction Method, which uses Bidirectional Long Term Memory architecture to predict popularity of a YouTube video using the title.
+Video titles are rendered using pretrained GLOVE embeddings. To analyze a title, the obtained representations are given to the BiLSTM network as input. The outputs of the BiLSTM network are then fed to the fully connected network for classification.
 
-### 3. Метод прогнозирования популярности  на основе свёрточной сети и ячейки BiLSTM.(Multimod_simple)
-Данный метод является комбинацией двух предыдущих методов. Текст обрабатывается при помощи метода GLOVE + BILSTM, а кадры при помощи метода номер RESNET + LSTM. Полученные представления конкатенирутся и для классификации строится двухслойная полносвязная.
+### 3. Popularity prediction method based on convolutional network and BiLSTM cell. (Multimod_simple)
+This method is a combination of the two previous methods. Text is processed using the GLOVE + BILSTM method, and frames are analyzed using the RESNET + LSTM method. The obtained representations are concatenated and a two-layer fully connected network is constructed for classification.
 
-### 4. Метод прогнозирования популярности на основе свёрточной сети и ячейки BiLSTM усложнение.(Multimod_complex)
-Метод похож на предыдущий, но к последнему слою LSTM для обработки кадров добавляется полносвязный слой и функция активации RELU.
 
-### 5.Метод прогноза популярности видеоконтента на основе статистики видеоконтента и видеоканала YouTube c помощью нейронной сети.(statistics)
-Метод использует количественные данные для прогнозирвания популярности видео. Модель состоит из полносвязных слоев и функций активации.
+### 4. Method for predicting the popularity of video content based on statistics of the video and the according YouTube video channel using a neural network. (Statistics)
+The method uses quantitative data to predict the popularity of a video. The model consists of fully connected layers and activation functions.
 
-### 6.Метод прогноза популярности видеоконтента на основе статистики видеоконтента и видеоканала YouTube c помощью ансамбля деревьев Gradientboosting.(Gradient_boosting)
-Для прогнозирования популярности используется Gradientboosting, который применяется лишь к количественным признакам и категориальным (представлены при помощи OneHot).
+### 5. Method for predicting the popularity of video content based on statistics of video content and the according YouTube video channel using an ensemble of trees Gradientboosting.(Gradient_boosting)
+Gradientboosting is used to predict popularity, which is applied only to quantitative and categorical features(represented using OneHot).
 
-### 7.Метод прогноза популярности видеоконтента на основе статистики видеоконтента и видеоканала YouTube c помощью ансамбля деревьев XGBClassifier.(Xgb_classifier)
-Для прогнозирования популярности используется XGBClassifier. В качестве признаков для предсказания количества просмотров используются статистика просмотров предыдущего видео и канала, заголовок видео и "привлекательность" превью видео.
+### 6. Method for predicting the popularity of video content based on statistics of video content and YouTube video channel using an ensemble of trees XGBClassifier. (Xgb_classifier)
+The XGBClassifier is used to predict popularity. The number of views of previous video, channel statistics, the title of the video and the "attractiveness" of the video preview are used as variables to predict the number of views.
 
-### 8.Метод прогноза популярности видеоконтента на основе статистики видеоконтента и видеоканала YouTube c помощью ансамбля деревьев RandomForestClassifier. (Random_forest_classifier)
-Для прогнозирования популярности используется RandomForestClassifier. В качестве признаков для предсказания количества просмотров используются статистика просмотров предыдущего видео и канала, заголовок видео и "привлекательность" превью видео.
+### 7. Method for predicting the popularity of video content based on statistics of video content and the YouTube video channel using the RandomForestClassifier tree ensemble. (Random_forest_classifier)
+RandomForestClassifier is used to predict popularity. The statistics of views of the previous video and channel, the title of the video and the "attractiveness" of the video preview are used as indicators to predict the number of views.
 
-# Инструкция по запуску.
-Для запуска методов необходимо  последовательно запустить ячейки .ipynb. файлов.
+# Launching the project.
+In order to run the methods, you must run the .ipynb cells sequentially. files.
 
-# Требующиеся библиотеки.
+# Required libraries.
 - Python 3.6.8
 - Pytorch 1.5.0
 - Numpy 1.18.0
